@@ -2,26 +2,11 @@ import React, {useState} from 'react';
 import {StyleSheet, View, Button} from 'react-native';
 import {Player} from '@react-native-community/audio-toolkit';
 
-const PlayerComponent = () => {
+const RecorderComponent = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [player, setPlayer] = useState<Player>();
 
-  const checkEndOfPlayback = async (checkPlayer: Player) => {
-    if (checkPlayer) {
-      const myInterval = setInterval(() => {
-        const playing = checkPlayer.duration > checkPlayer.currentTime;
-        console.log(checkPlayer.state);
-        console.log(checkPlayer.duration);
-        console.log(checkPlayer.currentTime);
-        if (!playing) {
-          setIsPlaying(playing);
-          clearInterval(myInterval);
-        }
-      }, 100);
-    }
-  };
-
-  const startPlaying = async () => {
+  const startPlaying = () => {
     // const url = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
     const url = 'desculpe.mp3';
     const newPlayer = new Player(url, {
@@ -29,12 +14,17 @@ const PlayerComponent = () => {
       continuesToPlayInBackground: true,
     });
     console.log(newPlayer);
+    // newPlayer.prepare(err => {
+    //   if (err) {
+    //     console.log('Prepare ', err);
+    //     return;
+    //   }
 
+    // });
     newPlayer.play(err => {
       console.log('Play ', err);
       console.log(newPlayer.state);
       console.log(newPlayer);
-      checkEndOfPlayback(newPlayer);
     });
     setPlayer(newPlayer);
     setIsPlaying(true);
@@ -66,4 +56,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PlayerComponent;
+export default RecorderComponent;

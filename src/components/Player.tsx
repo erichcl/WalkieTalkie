@@ -7,18 +7,12 @@ const PlayerComponent = () => {
   const [player, setPlayer] = useState<Player>();
 
   const checkEndOfPlayback = async (checkPlayer: Player) => {
-    if (checkPlayer) {
-      const myInterval = setInterval(() => {
-        const playing = checkPlayer.duration > checkPlayer.currentTime;
-        console.log(checkPlayer.state);
-        console.log(checkPlayer.duration);
-        console.log(checkPlayer.currentTime);
-        if (!playing) {
-          setIsPlaying(playing);
-          clearInterval(myInterval);
-        }
-      }, 100);
-    }
+    setTimeout(() => {
+      const playing = checkPlayer.duration > checkPlayer.currentTime;
+      if (!playing) {
+        setIsPlaying(playing);
+      }
+    }, checkPlayer.duration);
   };
 
   const startPlaying = async () => {

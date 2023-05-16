@@ -1,48 +1,46 @@
 import React, {useState} from 'react';
 import {StyleSheet, View, Button} from 'react-native';
-import {Player} from '@react-native-community/audio-toolkit';
+import {Recorder} from '@react-native-community/audio-toolkit';
 
-const RecorderComponent = () => {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [player, setPlayer] = useState<Player>();
+export interface RecorderComponentInterface {
+  fileName: string;
+}
 
-  const startPlaying = () => {
+const RecorderComponent = ({fileName}: RecorderComponentInterface) => {
+  const [isRecording, setIsRecording] = useState(false);
+  const [recorder, setRecorder] = useState<Recorder>();
+
+  const startRecording = async () => {
     // const url = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
-    const url = 'desculpe.mp3';
-    const newPlayer = new Player(url, {
-      autoDestroy: false,
-      continuesToPlayInBackground: true,
+    const url = fileName || 'gravacao.mp3';
+    const newRecorder = new Recorder(url, {
+      bitrate: 128000,
+      channels: 1,
+      sampleRate: 44100,
+      quality: 'low',
+      format: 'mp3',
+      encoder: 'mp4',
     });
-    console.log(newPlayer);
-    // newPlayer.prepare(err => {
-    //   if (err) {
-    //     console.log('Prepare ', err);
-    //     return;
-    //   }
+    console.log(newRecorder);
 
-    // });
-    newPlayer.play(err => {
-      console.log('Play ', err);
-      console.log(newPlayer.state);
-      console.log(newPlayer);
-    });
-    setPlayer(newPlayer);
-    setIsPlaying(true);
-    console.log(newPlayer.state);
+    newRecorder.record();
+    setRecorder(newRecorder);
+    setIsRecording(true);
+    console.log(newRecorder.state);
   };
 
-  const stopPlaying = () => {
-    if (player) {
-      player.stop();
+  const stopRecording = () => {
+    if (recorder) {
+      recorder.stop();
     }
-    setIsPlaying(false);
+    setIsRecording(false);
   };
 
   return (
     <View style={styles.container}>
       <Button
-        title={isPlaying ? 'Stop' : 'Play'}
-        onPress={isPlaying ? stopPlaying : startPlaying}
+        title={isRecording ? 'Stop' : 'Record'}
+        onPress={isRecording ? stopRecording : startRecording}
       />
     </View>
   );

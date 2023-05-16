@@ -2,7 +2,11 @@ import React, {useState} from 'react';
 import {StyleSheet, View, Button} from 'react-native';
 import {Player} from '@react-native-community/audio-toolkit';
 
-const PlayerComponent = () => {
+export interface PlayerComponentInterface {
+  fileName: string;
+}
+
+const PlayerComponent = ({fileName}: PlayerComponentInterface) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [player, setPlayer] = useState<Player>();
 
@@ -17,7 +21,7 @@ const PlayerComponent = () => {
 
   const startPlaying = async () => {
     // const url = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
-    const url = 'desculpe.mp3';
+    const url = fileName || 'desculpe.mp3';
     const newPlayer = new Player(url, {
       autoDestroy: false,
       continuesToPlayInBackground: true,

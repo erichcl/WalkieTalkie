@@ -22,10 +22,10 @@ import {
   DebugInstructions,
   Header,
   LearnMoreLinks,
-  ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
 import PlayerComponent from './src/components/Player';
+import RecorderComponent from './src/components/Recorder';
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -79,10 +79,11 @@ function App(): JSX.Element {
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}>
           <Section title="Step One">
-            <PlayerComponent />
+            <PlayerComponent fileName="desculpe.mp3" />
           </Section>
           <Section title="See Your Changes">
-            <ReloadInstructions />
+            <RecorderComponent fileName="gravacao.mp3" />
+            <PlayerComponent fileName="gravacao.mp3" />
           </Section>
           <Section title="Debug">
             <DebugInstructions />

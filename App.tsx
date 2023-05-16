@@ -26,6 +26,7 @@ import {
 
 import PlayerComponent from './src/components/Player';
 import RecorderComponent from './src/components/Recorder';
+import SoundLevelMonitor from './src/components/SoundLevelMonitor';
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -59,6 +60,8 @@ function Section({children, title}: SectionProps): JSX.Element {
 
 function App(): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
+
+  SoundLevelMonitor();
 
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,

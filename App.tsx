@@ -78,12 +78,16 @@ function App(): JSX.Element {
           style={{
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}>
-          <Section title="Step One">
+          <Section title="Play">
             <PlayerComponent fileName="desculpe.mp3" />
           </Section>
-          <Section title="See Your Changes">
-            <RecorderComponent fileName="gravacao.mp3" />
-            <PlayerComponent fileName="gravacao.mp3" />
+          <Section title="Record and Play">
+            <Section title="">
+              <RecorderComponent fileName="gravacao.mp3" />
+            </Section>
+            <Section title="">
+              <PlayerComponent fileName="gravacao.mp3" />
+            </Section>
           </Section>
           <Section title="Debug">
             <DebugInstructions />

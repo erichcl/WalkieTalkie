@@ -1,51 +1,12 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {StyleSheet, View, Button} from 'react-native';
-import {Player} from '@react-native-community/audio-toolkit';
+import {userPlayerInterface} from '../hooks/usePlayer';
 
-export interface PlayerComponentInterface {
-  fileName: string;
-}
-
-const PlayerComponent = ({fileName}: PlayerComponentInterface) => {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [player, setPlayer] = useState<Player>();
-
-  const checkEndOfPlayback = async (checkPlayer: Player) => {
-    setTimeout(() => {
-      const playing = checkPlayer.duration > checkPlayer.currentTime;
-      if (!playing) {
-        setIsPlaying(playing);
-      }
-    }, checkPlayer.duration);
-  };
-
-  const startPlaying = async () => {
-    // const url = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
-    const url = fileName || 'desculpe.mp3';
-    const newPlayer = new Player(url, {
-      autoDestroy: false,
-      continuesToPlayInBackground: true,
-    });
-    console.log(newPlayer);
-
-    newPlayer.play(err => {
-      console.log('Play ', err);
-      console.log(newPlayer.state);
-      console.log(newPlayer);
-      checkEndOfPlayback(newPlayer);
-    });
-    setPlayer(newPlayer);
-    setIsPlaying(true);
-    console.log(newPlayer.state);
-  };
-
-  const stopPlaying = () => {
-    if (player) {
-      player.stop();
-    }
-    setIsPlaying(false);
-  };
-
+const PlayerComponent = ({
+  stopPlaying,
+  startPlaying,
+  isPlaying,
+}: userPlayerInterface) => {
   return (
     <View style={styles.container}>
       <Button

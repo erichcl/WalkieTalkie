@@ -14,10 +14,12 @@
     "@react-native-community/audio-toolkit": "^2.0.3",
     "@react-navigation/native": "^6.1.6",
     "@react-navigation/native-stack": "^6.9.12",
+    "@reduxjs/toolkit": "^1.9.5",
     "react": "18.2.0",
     "react-native": "0.71.7",
     "react-native-permissions": "^3.8.0",
-    "react-native-sound-level": "^1.2.0"
+    "react-native-sound-level": "^1.2.0",
+    "react-redux": "^8.0.5"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

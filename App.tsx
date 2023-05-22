@@ -26,16 +26,12 @@ import {
 
 import PlayerComponent from './src/components/Player';
 import RecorderComponent from './src/components/Recorder';
-// import SoundLevelMonitor from './src/components/SoundLevelMonitor';
-import {SoundLevelResult} from 'react-native-sound-level';
 import usePlayer from './src/hooks/usePlayer';
 import useRecorder from './src/hooks/useRecorder';
 import useSoundLevelMonitor from './src/hooks/useSoundLevelMonitor';
 
-import configStore from './src/store/configureStore';
-import {Provider} from 'react-redux';
-
-const store = configStore();
+import {useSelector, useDispatch} from 'react-redux';
+import {startedTalking, stopedTalking} from './src/reducers/talkingReducer';
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -68,6 +64,7 @@ function Section({children, title}: SectionProps): JSX.Element {
 }
 
 function App(): JSX.Element {
+  const dispatch = useDispatch();
   const isDarkMode = useColorScheme() === 'dark';
   // const [soundLevel, setSoundLevel] = useState<SoundLevelResult>();
 
@@ -84,57 +81,55 @@ function App(): JSX.Element {
   };
 
   return (
-    <Provider store={store}>
-      <SafeAreaView style={backgroundStyle}>
-        <StatusBar
-          barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-          backgroundColor={backgroundStyle.backgroundColor}
-        />
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={backgroundStyle}>
-          <Header />
-          <View
-            style={{
-              backgroundColor: isDarkMode ? Colors.black : Colors.white,
-            }}>
-            <Section title="Play">
-              <PlayerComponent
-                startPlaying={examplePlayerData.startPlaying}
-                stopPlaying={examplePlayerData.stopPlaying}
-                isPlaying={examplePlayerData.isPlaying}
+    <SafeAreaView style={backgroundStyle}>
+      <StatusBar
+        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+        backgroundColor={backgroundStyle.backgroundColor}
+      />
+      <ScrollView
+        contentInsetAdjustmentBehavior="automatic"
+        style={backgroundStyle}>
+        <Header />
+        <View
+          style={{
+            backgroundColor: isDarkMode ? Colors.black : Colors.white,
+          }}>
+          <Section title="Play">
+            <PlayerComponent
+              startPlaying={examplePlayerData.startPlaying}
+              stopPlaying={examplePlayerData.stopPlaying}
+              isPlaying={examplePlayerData.isPlaying}
+            />
+          </Section>
+          <Section title="Record and Play">
+            <Section title="">
+              <RecorderComponent
+                startRecording={recordingRecorderData.startRecording}
+                stopRecording={recordingRecorderData.stopRecording}
+                isRecording={recordingRecorderData.isRecording}
               />
             </Section>
-            <Section title="Record and Play">
-              <Section title="">
-                <RecorderComponent
-                  startRecording={recordingRecorderData.startRecording}
-                  stopRecording={recordingRecorderData.stopRecording}
-                  isRecording={recordingRecorderData.isRecording}
-                />
-              </Section>
-              <Section title="">
-                <PlayerComponent
-                  startPlaying={recordingPlayerData.startPlaying}
-                  stopPlaying={recordingPlayerData.stopPlaying}
-                  isPlaying={recordingPlayerData.isPlaying}
-                />
-              </Section>
+            <Section title="">
+              <PlayerComponent
+                startPlaying={recordingPlayerData.startPlaying}
+                stopPlaying={recordingPlayerData.stopPlaying}
+                isPlaying={recordingPlayerData.isPlaying}
+              />
             </Section>
-            <Section title="Talking">
-              {useSoundLevel.isTalking && <Text>Talking</Text>}
-            </Section>
-            <Section title="Debug">
-              <DebugInstructions />
-            </Section>
-            <Section title="Learn More">
-              Read the docs to discover what to do next:
-            </Section>
-            <LearnMoreLinks />
-          </View>
-        </ScrollView>
-      </SafeAreaView>
-    </Provider>
+          </Section>
+          <Section title="Talking">
+            {useSoundLevel.isTalking && <Text>Talking</Text>}
+          </Section>
+          <Section title="Debug">
+            <DebugInstructions />
+          </Section>
+          <Section title="Learn More">
+            Read the docs to discover what to do next:
+          </Section>
+          <LearnMoreLinks />
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 

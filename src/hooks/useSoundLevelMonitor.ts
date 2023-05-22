@@ -1,9 +1,13 @@
 import {useEffect, useState} from 'react';
 import RNSoundLevel, {SoundLevelResult} from 'react-native-sound-level';
+import {useDispatch, useSelector} from 'react-redux';
+import {startedTalking, stopedTalking} from '../reducers/talkingReducer';
 
 const MONITOR_INTERVAL = 100; // in ms
 
 const useSoundLevelMonitor = () => {
+  const dispatch = useDispatch();
+  const talkingState = useSelector(state => state);
   const [soundLevel, setSoundLevel] = useState<SoundLevelResult>();
   const [isMonitoring, setIsMonitoring] = useState<Boolean>(false);
   const [isTalking, setIsTalking] = useState<Boolean>(false);
@@ -33,8 +37,10 @@ const useSoundLevelMonitor = () => {
   useEffect(() => {
     if (soundLevel && checkIsTalking(soundLevel?.rawValue)) {
       setIsTalking(true);
+      dispatch(startedTalking());
     } else {
       setIsTalking(false);
+      dispatch(stopedTalking());
     }
   }, [soundLevel]);
 

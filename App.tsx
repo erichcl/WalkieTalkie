@@ -5,9 +5,10 @@
  * @format
  */
 
-import React, {useState} from 'react';
+import React, {useEffect} from 'react';
 import type {PropsWithChildren} from 'react';
 import {
+  Button,
   SafeAreaView,
   ScrollView,
   StatusBar,
@@ -30,8 +31,13 @@ import usePlayer from './src/hooks/usePlayer';
 import useRecorder from './src/hooks/useRecorder';
 import useSoundLevelMonitor from './src/hooks/useSoundLevelMonitor';
 
-import {useSelector, useDispatch} from 'react-redux';
-import {startedTalking, stopedTalking} from './src/reducers/talkingReducer';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  startedTalking,
+  stopedTalking,
+  TalkingState,
+} from './src/reducers/talkingReducer';
+import {RootState} from './src/store/configureStore';
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -64,7 +70,11 @@ function Section({children, title}: SectionProps): JSX.Element {
 }
 
 function App(): JSX.Element {
+  const talkingState = useSelector<RootState, TalkingState>(
+    state => state.talking,
+  );
   const dispatch = useDispatch();
+
   const isDarkMode = useColorScheme() === 'dark';
   // const [soundLevel, setSoundLevel] = useState<SoundLevelResult>();
 
@@ -119,6 +129,11 @@ function App(): JSX.Element {
           </Section>
           <Section title="Talking">
             {useSoundLevel.isTalking && <Text>Talking</Text>}
+          </Section>
+          <Section title="Redux">
+            {talkingState.isTalking && <Text>Talking Selector</Text>}
+            {/* <Button title="Start" onPress={() => startBtn()} />
+            <Button title="Stop" onPress={() => stopBtn()} /> */}
           </Section>
           <Section title="Debug">
             <DebugInstructions />

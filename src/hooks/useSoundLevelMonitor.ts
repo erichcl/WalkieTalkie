@@ -1,16 +1,14 @@
 import {useEffect, useState} from 'react';
 import RNSoundLevel, {SoundLevelResult} from 'react-native-sound-level';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import {startedTalking, stopedTalking} from '../reducers/talkingReducer';
 
 const MONITOR_INTERVAL = 100; // in ms
 
 const useSoundLevelMonitor = () => {
   const dispatch = useDispatch();
-  const talkingState = useSelector(state => state);
   const [soundLevel, setSoundLevel] = useState<SoundLevelResult>();
-  const [isMonitoring, setIsMonitoring] = useState<Boolean>(false);
-  const [isTalking, setIsTalking] = useState<Boolean>(false);
+  const [isTalking, setIsTalking] = useState<boolean>(false);
   const checkIsTalking = (rawValue: number) => {
     if (rawValue > 2000) {
       return true;
@@ -19,29 +17,28 @@ const useSoundLevelMonitor = () => {
   };
 
   useEffect(() => {
-    if (isMonitoring) {
-      RNSoundLevel.stop();
-    }
     RNSoundLevel.start({
       monitoringInterval: MONITOR_INTERVAL,
       samplingRate: 16000, // default is 22050
     });
-    setIsMonitoring(true);
 
     RNSoundLevel.onNewFrame = data => {
       // see "Returned data" section below
       setSoundLevel(data);
     };
+    return () => RNSoundLevel.stop();
   }, []);
 
   useEffect(() => {
-    if (soundLevel && checkIsTalking(soundLevel?.rawValue)) {
+    if (soundLevel && checkIsTalking(soundLevel.rawValue)) {
       setIsTalking(true);
       dispatch(startedTalking());
     } else {
       setIsTalking(false);
       dispatch(stopedTalking());
     }
+    // doesn't make sense to include dispatch on the dependency list of the useEffect
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [soundLevel]);
 
   return {soundLevel, isTalking};

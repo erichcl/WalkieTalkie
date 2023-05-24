@@ -4,12 +4,11 @@ import {useDispatch} from 'react-redux';
 import {startedTalking, stopedTalking} from '../reducers/talkingReducer';
 
 const MONITOR_INTERVAL = 100; // in ms
-const defaultThresholdValue = 2000; // in dB
+const defaultThresholdValue = 2500; // in dB
 
 const useSoundLevelMonitor = () => {
   const dispatch = useDispatch();
   const [soundLevel, setSoundLevel] = useState<SoundLevelResult>();
-  const [isTalking, setIsTalking] = useState<boolean>(false);
   const [threshold, setThreshold] = useState<number>(defaultThresholdValue);
   const checkIsTalking = (rawValue: number) => {
     return rawValue > threshold;
@@ -30,16 +29,14 @@ const useSoundLevelMonitor = () => {
 
   useEffect(() => {
     if (soundLevel && checkIsTalking(soundLevel.rawValue)) {
-      setIsTalking(true);
       dispatch(startedTalking());
     } else {
-      setIsTalking(false);
       dispatch(stopedTalking());
     }
     // doesn't make sense to include dispatch on the dependency list of the useEffect
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [soundLevel]);
 
-  return {soundLevel, isTalking, threshold, setThreshold};
+  return {threshold, setThreshold};
 };
 export default useSoundLevelMonitor;

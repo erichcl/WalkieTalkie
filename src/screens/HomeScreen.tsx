@@ -1,6 +1,5 @@
 import React from 'react';
 import {Text, useColorScheme, View} from 'react-native';
-
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 
 // components
@@ -13,6 +12,7 @@ import ScreenWrapper from '../components/ScreenWrapper';
 import usePlayer from '../hooks/usePlayer';
 import useRecorder from '../hooks/useRecorder';
 import useSoundLevelMonitor from '../hooks/useSoundLevelMonitor';
+import useAutoRecorder from '../hooks/useAutoRecorder';
 
 // Redux imports
 import {useSelector} from 'react-redux';
@@ -30,6 +30,7 @@ function HomeScreen() {
   const recordingPlayerData = usePlayer({fileName: 'gravacao.mp3'});
   const recordingRecorderData = useRecorder({fileName: 'gravacao.mp3'});
   const useSoundLevel = useSoundLevelMonitor();
+  const autoRecorder = useAutoRecorder();
 
   return (
     <ScreenWrapper>
@@ -38,33 +39,21 @@ function HomeScreen() {
           backgroundColor: isDarkMode ? Colors.black : Colors.white,
         }}>
         <Section title="Play">
-          <PlayerComponent
-            startPlaying={examplePlayerData.startPlaying}
-            stopPlaying={examplePlayerData.stopPlaying}
-            isPlaying={examplePlayerData.isPlaying}
-          />
+          <PlayerComponent {...examplePlayerData} />
         </Section>
         <Section title="Record and Play">
           <Section title="">
-            <RecorderComponent
-              startRecording={recordingRecorderData.startRecording}
-              stopRecording={recordingRecorderData.stopRecording}
-              isRecording={recordingRecorderData.isRecording}
-            />
+            <RecorderComponent {...recordingRecorderData} />
           </Section>
           <Section title="">
-            <PlayerComponent
-              startPlaying={recordingPlayerData.startPlaying}
-              stopPlaying={recordingPlayerData.stopPlaying}
-              isPlaying={recordingPlayerData.isPlaying}
-            />
+            <PlayerComponent {...recordingPlayerData} />
           </Section>
-        </Section>
-        <Section title="Talking">
-          {useSoundLevel.isTalking && <Text>Talking</Text>}
         </Section>
         <Section title="Redux">
           {talkingState.isTalking && <Text>Talking Selector</Text>}
+        </Section>
+        <Section title="Recording">
+          {autoRecorder.recording && <Text>Recording</Text>}
         </Section>
       </View>
     </ScreenWrapper>

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, useColorScheme, View} from 'react-native';
+import {Button, Text, useColorScheme, View} from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 
 // components
@@ -54,6 +54,11 @@ function HomeScreen() {
         </Section>
         <Section title="Recording">
           {autoRecorder.recording && <Text>Recording</Text>}
+          <PlayerComponent
+            isPlaying={autoRecorder.isPlaying}
+            startPlaying={autoRecorder.startPlaying}
+            stopPlaying={autoRecorder.stopPlaying}
+          />
         </Section>
       </View>
     </ScreenWrapper>

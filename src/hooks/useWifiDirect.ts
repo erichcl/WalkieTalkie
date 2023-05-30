@@ -6,13 +6,21 @@ import {
   startDiscoveringPeers,
   stopDiscoveringPeers,
   getAvailablePeers,
+  connect,
+  cancelConnect,
+  createGroup,
+  removeGroup,
+  getGroupInfo,
   // @ts-ignore
 } from 'react-native-wifi-p2p';
+import device from '../types/device';
 
 const useWifiDirect = () => {
   const [initialized, setInitialized] = useState(false);
   const [discoveringPeers, setDiscoveringPeers] = useState(false);
-  const [availablePeers, setAvailablePeers] = useState<any[]>([]);
+  const [availablePeers, setAvailablePeers] = useState<device[]>([]);
+  const [isConnected, setIsConnected] = useState(false);
+  const [hasGroup, setHasGroup] = useState(false);
   const requestPermission = async () => {
     await PermissionsAndroid.request(
       PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
@@ -43,15 +51,55 @@ const useWifiDirect = () => {
         'WifiDirect is not initialized or is not discovering peers',
       );
     }
-    console.log('getAvailablePeers');
+
     getAvailablePeers()
       .then(({devices}) => {
+        console.log('getAvailablePeers');
         console.log(devices);
-        setAvailablePeers(devices);
+        if (devices) {
+          setAvailablePeers(devices);
+        }
       })
       .catch(err => {
         console.log(err);
       });
+  };
+
+  const connectPeer = async (peer: device) => {
+    connect(peer.deviceAddress)
+      .then(() => {
+        console.log('Successfully connected');
+        setIsConnected(true);
+      })
+      .catch(err => console.error('Something gone wrong. Details: ', err));
+  };
+
+  const disconnectPeer = async () => {
+    cancelConnect()
+      .then(() => {
+        console.log('Successfully disconnected');
+        setIsConnected(false);
+      })
+      .catch(err => console.error('Something gone wrong. Details: ', err));
+  };
+
+  const newGroup = async () => {
+    createGroup()
+      .then(() => {
+        console.log('Group created successfully!');
+        setHasGroup(true);
+      })
+      .catch(err => console.error('Something gone wrong. Details: ', err));
+    console.log(getGroupInfo());
+  };
+
+  const closeGroup = async () => {
+    removeGroup()
+      .then(() => {
+        console.log("Currently you don't belong to group!");
+        setHasGroup(false);
+      })
+      .catch(err => console.error('Something gone wrong. Details: ', err));
   };
 
   useEffect(() => {
@@ -80,6 +128,12 @@ const useWifiDirect = () => {
 
       return () => {
         stopDiscoveringPeers();
+        if (hasGroup) {
+          closeGroup();
+        }
+        if (isConnected) {
+          disconnectPeer();
+        }
       };
     };
 
@@ -117,7 +171,16 @@ const useWifiDirect = () => {
     //     .catch(err => console.log(err));
   }, []);
 
-  return {loadAvailablePeers, availablePeers};
+  return {
+    loadAvailablePeers,
+    availablePeers,
+    connectPeer,
+    disconnectPeer,
+    isConnected,
+    newGroup,
+    closeGroup,
+    hasGroup,
+  };
 };
 
 export default useWifiDirect;

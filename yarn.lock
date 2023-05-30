@@ -6057,6 +6057,11 @@
   "resolved" "https://registry.npmjs.org/react-native-sound-level/-/react-native-sound-level-1.2.0.tgz"
   "version" "1.2.0"
 
+"react-native-wifi-p2p@^3.4.1":
+  "integrity" "sha512-zX5JL4rnDpnl2EiF7+U4IGb5qHpmScoe/CBysITHBUxfPdlYJVNN7MY6pm5Z7CVvygJfS3KvYFBRcmccErFs/A=="
+  "resolved" "https://registry.npmjs.org/react-native-wifi-p2p/-/react-native-wifi-p2p-3.4.1.tgz"
+  "version" "3.4.1"
+
 "react-native@*", "react-native@>=0.59", "react-native@>=0.63.3", "react-native@0.71.7":
   "integrity" "sha512-Id6iRLS581fJMFGbBl1jP5uSmjExtGOvw5Gvh7694zISXjsRAsFMmU+izs0pyCLqDBoHK7y4BT7WGPGw693nYw=="
   "resolved" "https://registry.npmjs.org/react-native/-/react-native-0.71.7.tgz"

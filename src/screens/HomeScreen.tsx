@@ -18,6 +18,7 @@ import useAutoRecorder from '../hooks/useAutoRecorder';
 import {useSelector} from 'react-redux';
 import {TalkingState} from '../reducers/talkingReducer';
 import {RootState} from '../store/configureStore';
+import useWifiDirect from '../hooks/useWifiDirect';
 
 function HomeScreen() {
   const talkingState = useSelector<RootState, TalkingState>(
@@ -29,8 +30,14 @@ function HomeScreen() {
   const examplePlayerData = usePlayer({fileName: 'desculpe.mp3'});
   const recordingPlayerData = usePlayer({fileName: 'gravacao.mp3'});
   const recordingRecorderData = useRecorder({fileName: 'gravacao.mp3'});
-  const useSoundLevel = useSoundLevelMonitor();
-  const autoRecorder = useAutoRecorder();
+  // const useSoundLevel = useSoundLevelMonitor();
+  // const autoRecorder = useAutoRecorder();
+  const wifiDirect = useWifiDirect();
+
+  const loadPeers = async () => {
+    await wifiDirect.loadAvailablePeers();
+    console.log(wifiDirect.availablePeers);
+  };
 
   return (
     <ScreenWrapper>
@@ -52,14 +59,21 @@ function HomeScreen() {
         <Section title="Redux">
           {talkingState.isTalking && <Text>Talking Selector</Text>}
         </Section>
-        <Section title="Recording">
+        <Section title="Wifi Direct">
+          <Button title="Load Peers" onPress={loadPeers} />
+          {/* {wifiDirect.availablePeers &&
+            wifiDirect.availablePeers.map(peer => {
+              <Text>{peer}</Text>;
+            })} */}
+        </Section>
+        {/* <Section title="Recording">
           {autoRecorder.recording && <Text>Recording</Text>}
           <PlayerComponent
             isPlaying={autoRecorder.isPlaying}
             startPlaying={autoRecorder.startPlaying}
             stopPlaying={autoRecorder.stopPlaying}
           />
-        </Section>
+        </Section> */}
       </View>
     </ScreenWrapper>
   );

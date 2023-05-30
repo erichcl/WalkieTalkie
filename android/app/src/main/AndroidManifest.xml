@@ -15,9 +15,24 @@
     <!-- If you want to record audio to a SD card (i.e. external storage),
          you need to add this permission -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission
+               android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
-    <application
-      android:name=".MainApplication"
+    <uses-permission
+               android:name="android.permission.ACCESS_COARSE_LOCATION"/>               
+               
+    <uses-permission
+           android:required="true"
+           android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission
+           android:required="true"
+           android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <!-- If your app targets Android 13 (API level 33) or higher, you must declare the NEARBY_WIFI_DEVICES permission. -->
+    <uses-permission android:name="android.permission.NEARBY_WIFI_DEVICES" />
+    <!-- If your app derives location information from Wi-Fi APIs, dont include the "usesPermissionFlags" attribute. -->
+
+   <application
+     android:name=".MainApplication"
       android:label="@string/app_name"
       android:icon="@mipmap/ic_launcher"
       android:roundIcon="@mipmap/ic_launcher_round"
